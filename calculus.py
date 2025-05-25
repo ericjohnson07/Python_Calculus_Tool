@@ -8,35 +8,35 @@ from sympy.solvers import solve
 
 x = symbols('x')
 
-def defineNumerator(function):
-    match = re.match(r'^\((.*?)\)/\((.*?)\)$', function)
+# Function to separate numerator from given expression
+def defineNumerator(expr):
+    match = re.match(r'^\((.*?)\)/\((.*?)\)$', expr)
     if match:
         return match.group(1)
     return None
 
-def defineDenominator(function):
-    match = re.match(r'^\((.*?)\)/\((.*?)\)$', function)
+# Function to separate denominator from given expression
+def defineDenominator(expr):
+    match = re.match(r'^\((.*?)\)/\((.*?)\)$', expr)
     if match:
         return match.group(2)
     return None
 
+# Function to validate the parenthesis syntax of expression
 def validateInput():
     while True:
-        function = input("Enter function in form of (numerator)/(denominator): ")
-        count_open_parenthesis = function.count('(')
-        count_closed_parenthesis = function.count(')')
+        expr = input("Enter expression in form of (numerator)/(denominator), 'q' to quit: ")
+        count_open_parenthesis = expr.count('(')
+        count_closed_parenthesis = expr.count(')')
         total_parenthesis = count_open_parenthesis + count_closed_parenthesis
 
         if count_open_parenthesis != count_closed_parenthesis or total_parenthesis % 2 != 0:
-            print("Error: Unbalanced parenthesis in function " + function + "...Please try again.")
+            print("Error: Unbalanced parenthesis in expression " + expr + "...Please try again.")
         else:
-            return function
+            return expr
 
 # Definition of function to find aymptotes. numerator and denominator parameter values defined in main
-def undefined(numerator, denominator):
-
-    # Variable to concatenate numerator and denominator into single object
-    function = "(" + numerator + ")/(" + denominator + ")"
+def undefined(expr, numerator, denominator):
 
     # Variable to store solution to check if it is real 
     solution = solve(denominator, x)
@@ -44,28 +44,29 @@ def undefined(numerator, denominator):
 
     # If solutions are real, output solutions
     if real_solutions:
-        print("In function  " + function + "  undefined at", solve(denominator,x))
+        print("In function  " + expr + "  undefined at", solve(denominator,x))
     # Else output no undefined points
     else:
-        print("Function is not undefined at any point in function " + function)
+        print("Function is not undefined at any point in function " + expr)
 
-#def limit(numerator, denominator, x):
-#   
-#    h = 0.0001
-#
-#    function = "(" + numerator + ")/(" + denominator + ")"
-#
-#    rightsub = solve(x + h)
-#    leftsub = solve(x - h)
-#
-#    subfunctionright = function.replace("x", rightsub)
-#    subfunctionleft = function.replace("x", leftsub)
-#
-#    print("f(x) right = ", subfunctionright)
-#    print("f(x) left = ", subfunctionleft)
-#
-#    if round(y_right) != round(y_left):
-#        print("Limit does not exist")
+def limit(xval, expr, numerator, denominator):
+   
+    h = 0.00001
+
+    rightsub = str(xval + h)
+    leftsub = str(xval - h)
+
+    subexprright = expr.replace("x", rightsub)
+    subexprleft = expr.replace("x", leftsub)
+
+    limitright = eval(subexprright)
+    limitleft = eval(subexprleft)
+
+    print("f(x) right = ", limitright)
+    print("f(x) left = ", limitleft)
+
+    if round(limitright) != round(limitleft):
+        print("Limit does not exist")
     
 
 # MAIN MAIN MAIN
@@ -83,20 +84,27 @@ def main():
         if option.isnumeric():
             # If statement for option 1 (Undefined point of a function)
             if option == "1":
-                function = validateInput()
-                numerator = defineNumerator(function)
-                denominator = defineDenominator(function)
+                expr = validateInput()
+                numerator = defineNumerator(expr)
+                denominator = defineDenominator(expr)
                 
                 # Checks if numerator and denominator is not null
                 if numerator and denominator is not None:
-                    undefined(numerator, denominator)
+                    undefined(expr, numerator, denominator)
                 # Otherwise, call main
                 else:
                     main()
+            if option == "2":
+                expr = validateInput()
+                xval = float(input("Enter value of x where limit approaches: "))
+                numerator = defineNumerator(expr)
+                denominator = defineDenominator(expr)
 
-            #if option == "2":
-             #   numerator = input("Enter numerator of function: ")
-              #  numerator = input("Enter denominator of function: ")
+                if numerator and denominator is not None:
+                    limit(xval, expr, denominator, numerator)
+                
+                else:
+                    main()
 
             # Else statement for all option inputs
             else:
