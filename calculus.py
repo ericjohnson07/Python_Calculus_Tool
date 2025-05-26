@@ -60,8 +60,8 @@ def limit(xval, expr, numerator, denominator):
     leftsub = str(xval - h)
 
     # Replace all values of "x" within the given expression with the approaching to value
-    subexprright = expr.replace("x", rightsub)
-    subexprleft = expr.replace("x", leftsub)
+    subexprright = expr.replace("x", "(" + rightsub + ")")
+    subexprleft = expr.replace("x", "(" + leftsub + ")")
 
     # Evaluate final expression to determine limits
     limitright = eval(subexprright)
@@ -71,7 +71,7 @@ def limit(xval, expr, numerator, denominator):
     print("\nLimit from left (" + str(xval) + "-) = ", limitleft)
 
     if round(limitright) != round(limitleft):
-        print("\nLimit does not exist")
+        print("\nLimit does not exist at x =", xval)
     else:
         limit = eval(expr.replace("x",str(xval)))
         print("\nNo asymptote at given value of x = " + str(xval) + ", limit of function is " + str(limit) + "\n")
