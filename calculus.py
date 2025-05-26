@@ -49,24 +49,32 @@ def undefined(expr, numerator, denominator):
     else:
         print("Function is not undefined at any point in function " + expr)
 
+# Function to determine limit of given expression
 def limit(xval, expr, numerator, denominator):
    
+    # Small value of h to substitute into right and left limits
     h = 0.00001
 
+    # Evaluate approaching to value
     rightsub = str(xval + h)
     leftsub = str(xval - h)
 
+    # Replace all values of "x" within the given expression with the approaching to value
     subexprright = expr.replace("x", rightsub)
     subexprleft = expr.replace("x", leftsub)
 
+    # Evaluate final expression to determine limits
     limitright = eval(subexprright)
     limitleft = eval(subexprleft)
-
-    print("f(x) right = ", limitright)
-    print("f(x) left = ", limitleft)
+   
+    print("\nLimit from right (" + str(xval) + "+) = ", limitright)
+    print("\nLimit from left (" + str(xval) + "-) = ", limitleft)
 
     if round(limitright) != round(limitleft):
-        print("Limit does not exist")
+        print("\nLimit does not exist")
+    else:
+        limit = eval(expr.replace("x",str(xval)))
+        print("\nNo asymptote at given value of x = " + str(xval) + ", limit of function is " + str(limit) + "\n")
     
 
 # MAIN MAIN MAIN
@@ -74,7 +82,7 @@ def main():
     
     # Print options 
     print("List of operations: ")
-    print("1. Find where a function is undefined")
+    print("1. Find where a function is undefined\n2. Find the limits of a function's aymptotes at a given value of x")
     
     # Gather user input for choice of operation
     option = input("Enter option: ")
